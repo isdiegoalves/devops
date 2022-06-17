@@ -2,7 +2,7 @@
 FROM nginx
 
 	# Autor/Mantenedor
-MAINTAINER Jonathan Baraldi
+MAINTAINER Diego Alves Oliveira da Silva
 
 	# Copiar configurações customizadas do diretório atual
 COPY nginx.conf /etc/nginx/nginx.conf
