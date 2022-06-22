@@ -58,38 +58,29 @@ spec:
 
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: graylog
   namespace: graylog
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - nodes
-  - nodes/proxy
-  - services
-  - endpoints
-  - pods
-  verbs:
-  - get
-  - list
-  - watch
-  verbs:
-  - get
+  - apiGroups: [""]
+    resources: ["nodes", "nodes/proxy", "services", "endpoints", "pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions"]
+    resources: ["ingresses/status"]
+    verbs: ["update"]
 
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: graylog
   namespace: graylog
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: graylog
 subjects:
 - kind: Group
   name: system:serviceaccounts
@@ -97,6 +88,10 @@ subjects:
 - kind: ServiceAccount
   name: graylog
   namespace: graylog
+roleRef:
+  kind: ClusterRole
+  name: graylog
+  apiGroup: rbac.authorization.k8s.io
 
 
 
@@ -329,22 +324,25 @@ spec:
 
 
 ---
-apiVersion: extensions/v1beta1
 kind: Ingress
+apiVersion: networking.k8s.io/v1
 metadata:
-  namespace: graylog
   name: graylog
+  namespace: graylog
   annotations:
     allow.http: "false"
 spec:
   rules:
-  - host: graylog.rancher.dev-ops-ninja.com
+  - host: graylog.rancher.diegolabs.xyz
     http:
       paths:
-        - path: /
-          backend:
-            serviceName: graylog
-            servicePort: 9000
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: graylog
+            port:
+              number: 9000
 
 
 ---
@@ -355,37 +353,31 @@ metadata:
   name: fluentd
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: graylog
   name: fluentd
+  namespace: graylog
 rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - endpoints
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups: [""]
+    resources: ["pods", "endpoints"]
+    verbs: ["get", "list", "watch"]
 
 
 ---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
+  name: fluentd
   namespace: graylog
-  name: fluentd
-roleRef:
-  kind: ClusterRole
-  name: fluentd
-  apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
   name: fluentd
   namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: fluentd
+  apiGroup: rbac.authorization.k8s.io
 
 
 
