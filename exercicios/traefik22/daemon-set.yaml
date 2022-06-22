@@ -3,6 +3,7 @@ kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: traefik-daemon-set
+  namespace: kube-system
   labels:
     applicationn: traefik-daemon-set
 spec:
@@ -55,7 +56,7 @@ spec:
         # - --log.level=debug
 
         # Let's Encrypt Configurtion.
-        - --certificatesresolvers.default.acme.email=<SEU_EMAIL>
+        - --certificatesresolvers.default.acme.email=isdiegoalves@gmail.com
         - --certificatesresolvers.default.acme.storage=acme.json
         - --certificatesresolvers.default.acme.tlschallenge
         # Use the staging ACME server. Uncomment this while testing to prevent
