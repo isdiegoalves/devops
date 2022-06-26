@@ -642,7 +642,7 @@ $ export OS=$(uname -s| tr '[:upper:]' '[:lower:]')
 $ apt install unzip
 
 $ cd /home/ubuntu
-$ curl -OL https://github.com/kubeless/kubeless/releases/download/$RELEASE/kubeless_$OS-amd64.zip && unzip kubeless_$OS-amd64.zip && sudo mv bundles/kubeless_$OS-amd64/kubeless /usr/local/bin/
+$ curl -OL https://github.com/kubeless/kubeless/releases/download/v1.0.6/kubeless_$OS-amd64.zip && unzip kubeless_$OS-amd64.zip && sudo mv bundles/kubeless_$OS-amd64/kubeless /usr/local/bin/
 ```
 
 Para verificar se foi instalado corretamente, iremos rodar:
